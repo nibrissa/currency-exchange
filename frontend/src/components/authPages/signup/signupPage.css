@@ -1,0 +1,19 @@
+.lang span:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.lang {
+  display: flex;
+  column-gap: 0.5em;
+}
+
+.selected-lang {
+  font-weight: bold;
+}
+
+.error {
+  height: 1em;
+  color: red;
+  
+}
