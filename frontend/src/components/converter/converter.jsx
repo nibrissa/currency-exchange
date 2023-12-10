@@ -20,7 +20,7 @@ const Converter = () => {
     const [valutesList, setValutesList] = useState([])
     const [amountInFromCurrency, setAmountInFromCurrency] = useState(true)
       const convertAmount = (from, to, amount, update) => {
-        update(window.fx(amount).from(from).to(to));
+        window.fx&&update(window.fx(amount).from(from).to(to));
       }
 
     React.useEffect(() => {
@@ -77,7 +77,7 @@ const Converter = () => {
       <button onClick={()=>{
          setFromCurrency(toCurrency)
          setToCurrency(fromCurrency)
-         setAmountTo(window.fx(amountFrom).from(toCurrency).to(fromCurrency))
+         window.fx&&setAmountTo(window.fx(amountFrom).from(toCurrency).to(fromCurrency))
       }}>{'<->'}</button>
       <div id="USD">{USD+''}</div>
     <div id="EUR">{EUR+''}</div>
