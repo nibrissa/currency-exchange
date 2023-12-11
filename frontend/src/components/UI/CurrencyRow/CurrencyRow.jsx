@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from "react-i18next";
+import './currencyrow.sass'
 
 const CurrencyRow = (props) => {
   const { t } = useTranslation();
@@ -14,7 +15,7 @@ const CurrencyRow = (props) => {
         setTo
       } = props
   return (
-    <div>
+    <div className='row-wrapper'>
     <input type="number" className="input" value={amount} onChange={(e) => {
       onChangeAmount(e)
       update(selectedCurrency, to, e.target.value, setTo)

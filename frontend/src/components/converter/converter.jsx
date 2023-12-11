@@ -83,7 +83,7 @@ const Converter = () => {
                         <span onClick={()=>i18n.changeLanguage('en')} className={i18n.resolvedLanguage==='en'?'selected-lang':''}>EN</span>
                     </div>
         <div>
-            <h1>{t("Currency_converter")}</h1>
+            <h1 style={{color: '#0460D9'}}>{t("Currency_converter")}</h1>
           <div className='curreny-row-wrapper'>
           <CurrencyRow
         currencyOptions={currencies}
@@ -117,20 +117,24 @@ const Converter = () => {
           </div>
         
       <h3 id="header">Курсы валют ЦБ РФ на сегодня {timeUpdated+''}</h3>
-<p id="timestamp">Последнее обновление базы данных: сегодня {timeUpdatedDB+''}</p>
-<table id="currencies">
-<tbody>
 
-<tr>
+<table id="currencies" className='table-content'>
+
+<thead>
+
 <th className="d-none d-lg-table-cell">Цифр. код</th>
 <th className="d-none d-lg-table-cell">Букв. код</th>
 <th>Единиц</th>
 <th>Валюта</th>
 <th>Курс</th>
 <th className="d-none d-md-table-cell"></th>
-</tr>
+
+</thead>
+
+<tbody>
 {valutesList}
 </tbody>
+<caption id="timestamp">Последнее обновление базы данных: сегодня {timeUpdatedDB+''}</caption>
 </table>
         </div>
     </Layout>
