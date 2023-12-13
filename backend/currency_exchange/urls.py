@@ -6,6 +6,7 @@ from .views import *
 urlpatterns = [
     re_path(r'register/{0,1}$', CreateUserView.as_view()),
     re_path(r'operation/{0,1}$', OperationsViewSet.as_view()),
+    re_path(r'report/{0,1}$', SendReportToEmail.as_view())
 ]
 
 router = SimpleRouter()

@@ -1,13 +1,8 @@
 import datetime
-
-
 from django.core.mail import EmailMessage
 
+from celery_app import app
 from .models import Operation, Conversion, Spend, Receipt
-from os import environ
-
-from celery import Celery
-from django.conf import settings
 
 
 def filter_by_date(data_dict: dict, queryset):
@@ -97,13 +92,6 @@ def filter_conversions(request):
     conversions = filter_by_date(data_dict, conversions)
     return conversions
 
-environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
-
-app = Celery('service')
-app.config_from_object('django.conf:settings')
-app.conf.broker_url = settings.CELERY_BROKER_URL
-app.autodiscover_tasks()
-
 
 @app.task()
 def send_monthly_report_to_email(user, month):
@@ -125,7 +113,7 @@ def send_monthly_report_to_email(user, month):
     spends = Spend.objects.filter(user=user, operation_date_time__month=month).count()
     receipts = Receipt.objects.filter(user=user, operation_date_time__month=month).count()
     budget_type = 'Сбалансированный' if spends == receipts else 'Профицитный' if spends < receipts else 'Дефицитный'
-    message = f'Статистика за за {months.get(month)} {current_date_time.year}:\n' \
+    message = f'Статистика за {months.get(int(month))} {current_date_time.year}:\n' \
               f'Траты: {spends}\n.' \
               f'Поступления: {receipts}\n.' \
               f'Тип бюджета: {budget_type}.'

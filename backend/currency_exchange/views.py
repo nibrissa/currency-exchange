@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from .logic import filter_spends, filter_conversions, filter_receipts
+from .logic import filter_spends, filter_conversions, filter_receipts, send_monthly_report_to_email
 from .models import Conversion, Operation, Receipt, Spend
 from .serializers import UserSerializer, SpendSerializer, ReceiptSerializer, SpendSerializerForCreateUpdate, \
     ReceiptSerializerForCreateUpdate, ConversionSerializer, ConversionSerializerForCreateUpdate
@@ -15,6 +15,16 @@ class CreateUserView(CreateAPIView):
 
     model = User
     serializer_class = UserSerializer
+
+
+class SendReportToEmail(APIView):
+
+    def post(self, request):
+        try:
+            send_monthly_report_to_email(request.user, request.GET.get('month'))
+            return Response(200)
+        except TypeError:
+            return Response(401)
 
 
 class OperationsViewSet(APIView):
