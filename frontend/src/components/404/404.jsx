@@ -7,7 +7,7 @@ const NotFound = () => {
   const { t } = useTranslation();
   return (
     <div>
-      <div>404</div>
+      <div>-404-</div>
       <Link to={'/'}>{t("back")}</Link>
     </div>
   );
