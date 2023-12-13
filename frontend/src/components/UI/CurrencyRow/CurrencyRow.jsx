@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from "react-i18next";
-import './currencyrow.sass'
+import './currencyrow.css'
 
 const CurrencyRow = (props) => {
   const { t } = useTranslation();

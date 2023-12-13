@@ -3,7 +3,8 @@ import Layout from '../UI/layout/layout';
 import CurrencyRow from '../UI/CurrencyRow/CurrencyRow';
 import { useTranslation } from "react-i18next";
 import { currencies } from './currencies';
-import './converter.sass'
+import './converter.css'
+
 
 
 const Converter = () => {
@@ -74,7 +75,11 @@ const Converter = () => {
       }
   return (
     <Layout>
-    
+      <button onClick={()=>{
+         setFromCurrency(toCurrency)
+         setToCurrency(fromCurrency)
+         window.fx&&setAmountTo(window.fx(amountFrom).from(toCurrency).to(fromCurrency))
+      }}>{'<->'}</button>
       <div id="USD">{USD+''}</div>
     <div id="EUR">{EUR+''}</div>
                       <div className='lang'>
@@ -83,9 +88,8 @@ const Converter = () => {
                         <span onClick={()=>i18n.changeLanguage('en')} className={i18n.resolvedLanguage==='en'?'selected-lang':''}>EN</span>
                     </div>
         <div>
-            <h1 style={{color: '#0460D9'}}>{t("Currency_converter")}</h1>
-          <div className='curreny-row-wrapper'>
-          <CurrencyRow
+            <h1>{t("Currency_converter")}</h1>
+            <CurrencyRow
         currencyOptions={currencies}
         selectedCurrency={fromCurrency}
         onChangeCurrency={e => setFromCurrency(e.target.value)}
@@ -95,15 +99,7 @@ const Converter = () => {
         to={toCurrency}
         setTo={setAmountTo}
       />
-      <div className="equals">  
-        <button onClick={()=>{
-          setFromCurrency(toCurrency)
-          setToCurrency(fromCurrency)
-          window.fx&&setAmountTo(window.fx(amountFrom).from(toCurrency).to(fromCurrency))
-        }}>
-          {'<->'}
-          </button>
-        </div>
+      <div className="equals">=</div>
       <CurrencyRow
         currencyOptions={currencies}
         selectedCurrency={toCurrency}
@@ -114,10 +110,8 @@ const Converter = () => {
         to={fromCurrency}
         setTo={setAmountFrom}
       />
-          </div>
-        
       <h3 id="header">Курсы валют ЦБ РФ на сегодня {timeUpdated+''}</h3>
-
+<p id="timestamp">Последнее обновление базы данных: сегодня {timeUpdatedDB+''}</p>
 <table id="currencies" className='table-content'>
 
 <thead>
