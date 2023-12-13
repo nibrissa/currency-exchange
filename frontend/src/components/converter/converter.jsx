@@ -3,6 +3,7 @@ import Layout from '../UI/layout/layout';
 import CurrencyRow from '../UI/CurrencyRow/CurrencyRow';
 import { useTranslation } from "react-i18next";
 import { currencies } from './currencies';
+import './converter.css'
 
 
 
@@ -20,7 +21,7 @@ const Converter = () => {
     const [valutesList, setValutesList] = useState([])
     const [amountInFromCurrency, setAmountInFromCurrency] = useState(true)
       const convertAmount = (from, to, amount, update) => {
-        update(window.fx(amount).from(from).to(to));
+        window.fx&&update(window.fx(amount).from(from).to(to));
       }
 
     React.useEffect(() => {
@@ -77,7 +78,7 @@ const Converter = () => {
       <button onClick={()=>{
          setFromCurrency(toCurrency)
          setToCurrency(fromCurrency)
-         setAmountTo(window.fx(amountFrom).from(toCurrency).to(fromCurrency))
+         window.fx&&setAmountTo(window.fx(amountFrom).from(toCurrency).to(fromCurrency))
       }}>{'<->'}</button>
       <div id="USD">{USD+''}</div>
     <div id="EUR">{EUR+''}</div>
@@ -111,19 +112,23 @@ const Converter = () => {
       />
       <h3 id="header">Курсы валют ЦБ РФ на сегодня {timeUpdated+''}</h3>
 <p id="timestamp">Последнее обновление базы данных: сегодня {timeUpdatedDB+''}</p>
-<table id="currencies">
-<tbody>
+<table id="currencies" className='table-content'>
 
-<tr>
+<thead>
+
 <th className="d-none d-lg-table-cell">Цифр. код</th>
 <th className="d-none d-lg-table-cell">Букв. код</th>
 <th>Единиц</th>
 <th>Валюта</th>
 <th>Курс</th>
 <th className="d-none d-md-table-cell"></th>
-</tr>
+
+</thead>
+
+<tbody>
 {valutesList}
 </tbody>
+<caption id="timestamp">Последнее обновление базы данных: сегодня {timeUpdatedDB+''}</caption>
 </table>
         </div>
     </Layout>
