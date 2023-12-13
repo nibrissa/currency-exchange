@@ -1,13 +1,13 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from backend.currency_exchange.models import Conversion, Operation, Spend, Receipt
+from .models import Conversion, Operation, Spend, Receipt
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'password']
+        fields = ['id', 'username', 'first_name', 'last_name', 'password']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -22,7 +22,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ConversionSerializer(serializers.ModelSerializer):
-    user = UserSerializer
+    user = UserSerializer()
+
+    class Meta:
+        model = Conversion
+        fields = '__all__'
+
+
+class ConversionSerializerForCreateUpdate(serializers.ModelSerializer):
 
     class Meta:
         model = Conversion
@@ -30,7 +37,14 @@ class ConversionSerializer(serializers.ModelSerializer):
 
 
 class SpendSerializer(serializers.ModelSerializer):
-    user = UserSerializer
+    user = UserSerializer()
+
+    class Meta:
+        model = Spend
+        fields = '__all__'
+
+
+class SpendSerializerForCreateUpdate(serializers.ModelSerializer):
 
     class Meta:
         model = Spend
@@ -38,7 +52,14 @@ class SpendSerializer(serializers.ModelSerializer):
 
 
 class ReceiptSerializer(serializers.ModelSerializer):
-    user = UserSerializer
+    user = UserSerializer()
+
+    class Meta:
+        model = Receipt
+        fields = '__all__'
+
+
+class ReceiptSerializerForCreateUpdate(serializers.ModelSerializer):
 
     class Meta:
         model = Receipt

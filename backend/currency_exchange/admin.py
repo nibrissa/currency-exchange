@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Conversion, Spend, Receipt
+
+admin.site.register(Conversion)
+admin.site.register(Spend)
+admin.site.register(Receipt)

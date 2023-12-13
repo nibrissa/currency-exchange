@@ -1,6 +1,13 @@
 import datetime
 
-from backend.currency_exchange.models import Operation, Conversion, Spend, Receipt
+
+from django.core.mail import EmailMessage
+
+from .models import Operation, Conversion, Spend, Receipt
+from os import environ
+
+from celery import Celery
+from django.conf import settings
 
 
 def filter_by_date(data_dict: dict, queryset):
@@ -31,7 +38,7 @@ def filter_by_date(data_dict: dict, queryset):
     return queryset
 
 
-def filter_operations(request):
+def filter_spends(request):
     data_dict = {
         'one_date': request.GET.get('date'),
         'date_from': request.GET.get('date_from'),
@@ -46,9 +53,29 @@ def filter_operations(request):
 
     user = request.user
 
-    operations = Operation.objects.filter(user=user)
-    operations = filter_by_date(data_dict, operations)
-    return operations
+    spends = Spend.objects.filter(user=user)
+    spends = filter_by_date(data_dict, spends)
+    return spends
+
+
+def filter_receipts(request):
+    data_dict = {
+        'one_date': request.GET.get('date'),
+        'date_from': request.GET.get('date_from'),
+        'one_month': request.GET.get('month'),
+        'month_from': request.GET.get('month_from'),
+        'month_to': request.GET.get('month_to'),
+        'one_year': request.GET.get('year'),
+        'year_from': request.GET.get('year_from'),
+        'year_to': request.GET.get('year_to'),
+
+    }
+
+    user = request.user
+
+    receipts = Receipt.objects.filter(user=user)
+    receipts = filter_by_date(data_dict, receipts)
+    return receipts
 
 
 def filter_conversions(request):
@@ -70,7 +97,15 @@ def filter_conversions(request):
     conversions = filter_by_date(data_dict, conversions)
     return conversions
 
+environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 
+app = Celery('service')
+app.config_from_object('django.conf:settings')
+app.conf.broker_url = settings.CELERY_BROKER_URL
+app.autodiscover_tasks()
+
+
+@app.task()
 def send_monthly_report_to_email(user, month):
     months = {
         1: 'Январь',
@@ -94,3 +129,5 @@ def send_monthly_report_to_email(user, month):
               f'Траты: {spends}\n.' \
               f'Поступления: {receipts}\n.' \
               f'Тип бюджета: {budget_type}.'
+    email_message = EmailMessage(subject="Отчёт", body=message, to=[user.email])
+    email_message.send()

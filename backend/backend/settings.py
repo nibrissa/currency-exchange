@@ -26,13 +26,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-DEFAULT_FROM_EMAIL = ''
-SERVER_EMAIL = ''
+DEFAULT_FROM_EMAIL = 'c.urrency-e.xchange@yandex.ru'
+SERVER_EMAIL = 'c.urrency-e.xchange@yandex.ru'
 EMAIL_USE_TLS = True
-EMAIL_HOST = ''
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_PORT = ''
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'c.urrency-e.xchange@yandex.ru'
+EMAIL_HOST_PASSWORD = 'ghffFHgfhf$%64dgfdtr45'
+EMAIL_PORT = '465'
 
 # Application definition
 
@@ -47,12 +47,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django.contrib.postgres',
+    "corsheaders",
+
+    'currency_exchange'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -62,9 +65,9 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = False
 
-CORS_ORIGIN_WHITELIST = (
-    'localhost:3000',
-)
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+]
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -94,7 +97,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'currency_exchange_db',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'PASSWORD': '1',
         'HOST': 'localhost',
         'PORT': 5432
     }
@@ -151,8 +154,11 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 12,
 }
 
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,

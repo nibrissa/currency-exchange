@@ -43,7 +43,7 @@ class Spend(Operation):
         (FUEL, "Топливо"),
         (OTHER, "Другие траты")
     ]
-    type_of_spend = models.CharField(choices=SPENDS, max_length=2, verbose_name='Тип операции')
+    type = models.CharField(choices=SPENDS, max_length=2, verbose_name='Тип операции')
 
 
 class Receipt(Operation):
@@ -62,4 +62,4 @@ class Receipt(Operation):
         (OTHER, "Другие операции"),
 
     ]
-    type_of_receipt = models.CharField(choices=RECEIPTS, max_length=2, verbose_name='Тип операции')
+    type = models.CharField(choices=RECEIPTS, max_length=2, verbose_name='Тип операции')
